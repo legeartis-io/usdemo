@@ -1,0 +1,22 @@
+{% block vehicle %}
+    <li class="accordion-item" data-accordion-item>
+        <a href="javascript:void(0)" class="accordion-title">{{ vehicleInfo.brand ~ ' ' ~ vehicleInfo.name }}</a>
+        <div class="accordion-content" data-tab-content>
+            <h5>{{ vehicleInfo.brand ~ ' ' ~ vehicleInfo.name }}</h5>
+            <div class="attributes">
+                {% for key, value in vehicleInfo.properties|cast_to_array %}
+                    {% if key != 'ssd' %}
+                        <div class="grid-x">
+                            <div class="name cell medium-2 gray small-6">{{ value.localizedName ? value.localizedName : key|capitalize }}</div>
+                            <div class="value cell medium-10 small-6">{{ value.value }}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% if foundedVehicles|length > 1 %}
+                <a class="expanded button margin-top"
+                   href="{{ createUrl('search', 'select', {'vin': result.DetectedVehicleContext.vin, 'query': query} ) }}">{{ 'CHANGE_MODIFICATION'|t }}</a>
+            {% endif %}
+        </div>
+    </li>
+{% endblock %}

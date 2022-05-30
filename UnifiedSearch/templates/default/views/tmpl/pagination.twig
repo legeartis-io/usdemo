@@ -1,0 +1,108 @@
+{% block pagination %}
+    <div class="grid-x">
+    <div class="cell small-12">
+        <nav aria-label="Pagination" id="pagination">
+            {% if totalPages > 0 %}
+                <ul class="pagination">
+                    {% set startPage = -1 %}
+                    {% set endPage = totalPages %}
+                    {% set params =  '&' ~ param1|join('=') ~ '&' ~ param2|join('=') ~ '&' ~ param3|join('=') %}
+
+                    {% set Link = createUrl(controller, action, {'page': cPage - 1, 'format': format, 'size': 20}) ~ params %}
+                    <li class="pagination-previous {{ cPage == 0 ? 'disabled' : '' }}">
+                        {% if cPage == 0 %}
+                            Back
+                        {% else %}
+                            <a href="{{ Link }}" data-target="{{ block }}" aria-label="Prev page">Back<span class="show-for-sr">page</span></a>
+                        {% endif %}
+                    </li>
+
+                    {% if totalPages > 21 %}
+                        {% set startPage = -1 %}
+                        {% set endPage = 22 %}
+                        {% set endDots = true %}
+
+                        {% if cPage > 10 %}
+                            {% set startPage = cPage - 6 %}
+                            {% set endPage = cPage + 13 %}
+                            {% set Link = createUrl(controller, action, {'page': 0, 'format': format, 'size': 20}) ~ params %}
+
+                            <li>
+                                <a href="{{ format == 'raw' ? 'javascript:void(0)' : Link }}"
+                                   data-url="{{ Link }}" data-target="{{ block }}"
+                                   data-page="1">1</a>
+                            </li>
+
+                            <li class="ellipsis" aria-hidden="true"></li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for page in 0..totalPages - 1 %}
+                        {% if page > startPage and page < endPage %}
+                            {% set Link = createUrl(controller, action, {'page': page, 'format': format, 'size': 20}) ~ params %}
+
+                            <li class="{{ cPage == page ? 'current' : '' }}">
+                                {% if cPage == page %}
+                                    {{ page + 1 }}
+                                {% else %}
+                                    <a href="{{ format == 'raw' ? 'javascript:void(0)' : Link }}"
+                                       data-url="{{ Link }}" data-target="{{ block }}"
+                                       data-page="{{ page }}">{{ page + 1 }}</a>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if endDots and cPage < totalPages - 9 %}
+                        <li class="ellipsis" aria-hidden="true"></li>
+                        {% set Link = createUrl(controller, action, {'page': totalPages - 1, 'format': format, 'size': 20}) ~ params %}
+                        <li>
+                            <a href="{{ format == 'raw' ? 'javascript:void(0)' : Link }}"
+                               data-url="{{ Link }}" data-target="{{ block }}"
+                               data-page="{{ totalPages - 1 }}">{{ totalPages }}</a>
+                        </li>
+                    {% endif %}
+
+                    {% set Link = createUrl(controller, action, {'page': cPage + 1, 'format': format, 'size': 20}) ~ params %}
+                    <li class="pagination-next {{ cPage >= totalPages - 1 ? 'disabled' : '' }}">
+                        {% if cPage >= totalPages - 1 %}
+                            Next
+                        {% else %}
+                            <a href="{{ Link }}" aria-label="Next page" data-target="{{ block }}">
+                                Next<span class="show-for-sr">page</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            {% endif %}
+        </nav>
+    </div>
+    </div>
+{#    <script type="text/javascript">#}
+{#        jQuery(document).on('click', '.pagination li a', function (e) {#}
+{#            e.preventDefault();#}
+{#            e.stopPropagation();#}
+{#            var block = this.dataset.target;#}
+{#            var $this = this;#}
+
+{#            jQuery.ajax({#}
+{#                url: this.getAttribute('href'),#}
+{#                complete: function (html) {#}
+{#                    var responseElement = document.createElement('div');#}
+{#                    responseElement.innerHTML = html.responseText;#}
+{#                    var responseNode = responseElement.querySelector(block);#}
+{#                    var responsePagination = responseElement.querySelector('.pagination');#}
+{#                    var serviceRequest = responseElement.querySelector('div#service-request');#}
+
+{#                    document.querySelector(block).innerHTML = responseNode.innerHTML;#}
+{#                    document.querySelector('div#service-request').innerHTML = serviceRequest.innerHTML;#}
+{#                    Array.prototype.slice.call(document.querySelectorAll('.pagination')).forEach(function (node) {#}
+{#                        node.innerHTML = responsePagination.innerHTML;#}
+{#                        window.history.pushState('', '', $this.getAttribute('href'))#}
+{#                    });#}
+
+{#                    initHljs();#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+{% endblock %}

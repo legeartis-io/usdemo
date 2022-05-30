@@ -1,0 +1,9 @@
+{% block main %}
+    {% use 'unit/main/viewport.twig' %}
+    {% use 'unit/main/details_table.twig' %}
+
+    {{ block('viewport') }}
+    <div class="cell medium-6 small-12 left-padding">
+        {{ block('details_table') }}
+    </div>
+{% endblock %}

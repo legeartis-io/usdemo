@@ -1,0 +1,49 @@
+{% block table_body %}
+    {% set classes = {
+        'FAILED': 'alert',
+        'FINISHED' : 'success'
+    } %}
+
+    {% set messages = {
+        'FAILED': 'Failed',
+        'FINISHED' : 'success'
+    } %}
+
+    {% set completeStatuses = ['ABORTED', 'FAILED', 'FINISHED'] %}
+
+    <tbody>
+    {% if tasks %}
+        {% for task in tasks %}
+            <tr {% if task %}data-progress="{{ task.progressPercent ?: 1 }}"{% endif %}>
+                <td><a class="file-name" data-id="{{ task.id }}" href="{{ createUrl('files', 'downloadSource', {'taskId': task.id}) }}" target="_blank">{{ task.sourceFile }}</a></td>
+                <td width="100px">
+                    {% if task %}
+                        <div class="progress {{ classes[task.status] ? classes[task.status] : '' }}" role="progressbar" tabindex="0"
+                             aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-meter"
+                                 style="width: {{ task.status in completeStatuses ? '100%' : (task.progressPercent ? task.progressPercent ~ '%' : '0') }}">
+                                <p class="progress-meter-text">{{ task.progressPercent ? task.progressPercent ~ '%' : 0 ~ '%' }} {{ task.status }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+                <td>{{ task.startAt|date('d-m-Y') }}</td>
+                <td>
+                    {% if task.errorsExists %}
+                        <a href="{{ createUrl('files', 'downloadErrors', {'taskId': task.id}) }}" class="danger">{{ 'DOWNLOAD_FILE_WITH_ERRORS'|t }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if task.status == 'RUNNING' or task.status == 'QUEUED' %}
+                        <a class="remove-file" data-name="{{ task.sourceFile }}" data-id="{{ task.id }}" href="javascript:void(0)" title="{{ 'CANCEL_PROCESSING'|t }}"><i class="far fa-times-circle" style="color:red;"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="5">{{ 'NOTHING_FOUND'|t }}</td>
+        </tr>
+    {% endif %}
+    </tbody>
+{% endblock %}

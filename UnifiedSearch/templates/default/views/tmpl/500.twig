@@ -1,0 +1,10 @@
+{% extends 'error_base.twig' %}
+
+{% block icon %}<i class="fas fa-plug"></i>{% endblock %}
+{% block text %}
+     {% apply spaceless %}
+        {% if errorMessage %}
+            <h1><b>500 </b>{{ errorMessage }}</h1>
+        {% endif %}
+     {% endapply %}
+{% endblock %}

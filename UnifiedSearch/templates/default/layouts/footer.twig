@@ -1,0 +1,26 @@
+</main>
+<footer class="callout large secondary">
+    <!--Footer-->
+</footer>
+<script type="text/javascript">
+    var submitBtns = document.querySelectorAll('[data-submit-form]');
+
+    submitBtns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var form = e.target.closest('form');
+
+            if (form) {
+                var formValidation = new Validation();
+                formValidation.init(form);
+
+                if (formValidation.validate()) {
+                    form.submit();
+                }
+            }
+        })
+    })
+</script>
+</body>

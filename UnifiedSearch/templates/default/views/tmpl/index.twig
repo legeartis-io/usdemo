@@ -1,0 +1,13 @@
+<div class="grid-x">
+    <section class="medium-6 text-center float-center cell vertical-padding">
+        <h1>{{ 'START_PAGE_HEADING'|t }}</h1>
+        <small>{{ 'START_PAGE_ABOUT'|t }}</small>
+        <hr>
+        <p>{{ 'START_TEXT'|t }}</p>
+         {% apply spaceless %}
+            <div class="button-group text-center float-center">
+                <a href="{{ createUrl('search', 'show') }}" class="button hollow">{{ 'SHOW_DEMO'|t }}</a>
+            </div>
+         {% endapply %}
+    </section>
+</div>

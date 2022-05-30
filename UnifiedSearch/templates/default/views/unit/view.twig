@@ -1,0 +1,32 @@
+<div class="grid-container unit-list-page">
+    <h3 class="grid-x grid-margin-x" data-qualizer data-equalize-on="medium" id="test-eq">
+        {% for response in oemServiceData %}
+            {% if response.categories %}
+                {% for category in response.categories %}
+                    {% for unit in category.units %}
+                        {% set link = createUrl('unit', 'unit', {
+                            'vin': vin,
+                            'oem': oem,
+                            'unitid': unit.unitid,
+                            'ssd': unit.ssd,
+                            'catalog': vehicleInfo.catalogReference.catalog,
+                            'vehicleId': vehicleInfo.catalogReference.vehicleId,
+                            'indexedAutoId': indexedAutoId
+                        }) %}
+
+                        <div class="block cell medium-4 small-12">
+                            <div class="callout" data-equalizer-watch>
+                                <a href="{{ link }}">
+                                    <img src="{{ unit.largeimageurl }}">
+                                </a>
+                            </div>
+                            <a href="{{ link }}">{{ unit.code ~ ': ' ~ unit.name }}</a>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <h3>{{ 'UNIT_NOT_FOUND'|t }}</h3>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

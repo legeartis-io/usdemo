@@ -1,0 +1,11 @@
+{% extends 'error_base.twig' %}
+
+{% block icon %}<i class="fas fa-plug"></i>{% endblock %}
+{% block text %}
+     {% apply spaceless %}
+        <h1><b>502</b> Service temporarily unavailable</h1>
+        {% if errorMessage %}
+            <small>{{ errorMessage }}</small>
+        {% endif %}
+     {% endapply %}
+{% endblock %}

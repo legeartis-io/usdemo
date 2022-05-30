@@ -1,0 +1,15 @@
+{% block heading %}
+    <div class="cell small-12">
+        <div class="callout">
+            <h5>{{ unit.code }}: {{ unit.name }}</h5>
+            <div class="attributes">
+                {% for attribute in unit.attributes %}
+                    <div class="grid-x">
+                        <div class="name cell medium-2 gray small-6">{{ attribute.name }}</div>
+                        <div class="value cell medium-10 small-6">{{ attribute.value }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

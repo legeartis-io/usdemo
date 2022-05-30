@@ -1,0 +1,30 @@
+{
+  "items": [
+    {
+      "id": 0,
+      "name": "SEARCH_DEMO",
+      "link": "true",
+      "controller": "search",
+      "action": "show",
+      "icon": "visibility"
+    },
+    {
+      "id": 3,
+      "name": "UPLOADS",
+      "link": "true",
+      "controller": "files",
+      "action": "show",
+      "icon": "cloud_download",
+      "access_service": "us_upload"
+    },
+    {
+      "id": 4,
+      "name": "SELECT_VEHICLE",
+      "link": "true",
+      "controller": "search",
+      "action": "select",
+      "icon": "cloud_download",
+      "hidden": true
+    }
+  ]
+}

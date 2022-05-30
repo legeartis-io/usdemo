@@ -1,0 +1,11 @@
+{% use 'blocks/files_table/table_head.twig' %}
+{% use 'blocks/files_table/table_body.twig' %}
+
+{% block files_table %}
+    <div class="table-scroll">
+        <table id="fileTable">
+            {{ block('table_head') }}
+            {{ block('table_body') }}
+        </table>
+    </div>
+{% endblock %}

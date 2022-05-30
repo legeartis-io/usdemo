@@ -1,0 +1,34 @@
+{% block login_form %}
+    <div class="text-center">
+        {% if errorMessage %}
+            <h3><b>401 </b>{{ errorMessage }}</h3>
+        {% endif %}
+    </div>
+    <div class="login-form-block margin-top">
+        <form action="{{ createUrl('user', 'login') }}" method="post">
+            <div class="grid-x grid-margin-x">
+                <div class="cell callout large-3 medium-6 small-10 margin-auto">
+                    <div class="text-center">
+                        <h2>{{ 'NOT_AUTHORIZED'|t }}</h2>
+                        <small>{{ 'NOT_AUTHORIZED_DESC'|t }}</small>
+                    </div>
+                    <div class="grid-x grid-margin-x margin-top">
+                        <div class="cell small-12">
+                            <input data-required type="text" placeholder="login" name="user[login]">
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-12">
+                            <input data-required type="password" placeholder="password" name="user[password]">
+                        </div>
+                    </div>
+                    <input type="hidden" name="user[return]"
+                           value="{{ createUrl(controller|replace({'Controller': ''}), action) }}">
+                    <div class="grid-x grid-margin-x">
+                        <button type="submit" data-submit-form class="button cell small-12">{{ 'LOGIN'|t }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

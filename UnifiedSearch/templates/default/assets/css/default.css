@@ -1,0 +1,547 @@
+@keyframes rotate-logo {
+
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+@keyframes hypertransform-logo {
+    0%   {transform: rotate(0deg)}
+    30% {transform: rotate(-45deg)}
+    40% {
+        position: absolute;
+        transform: rotate(-45deg);
+        right: 0;
+    }
+    70% {
+        position: absolute;
+        transform: rotate(-45deg);
+        right: 1500px;
+    }
+    100% {
+        right: -82px;
+        transform: rotate(0);
+    }
+}
+
+input[type=text]::-ms-clear {  display: none; width : 0; height: 0; }
+input[type=text]::-ms-reveal {  display: none; width : 0; height: 0; }
+
+.marketing-hero h1 i:hover {
+    animation: rotate-logo 2s;
+}
+
+.marketing-hero h1 i.animated {
+    animation: hypertransform-logo 4s;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.response-wrapper .response {
+    max-height: 1px;
+    overflow: hidden;
+    padding: 0;
+    transition: max-height ease-in-out .2s;
+}
+
+.response.active {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.response-wrapper {
+    position: relative;
+}
+
+.response-wrapper i {
+    content: '';
+    width: 16px;
+    height: 16px;
+    display: block;
+    position: absolute;
+    cursor: pointer;
+    bottom: 8px;
+    left: 50%;
+    transform: rotate(225deg);
+    border-left: solid 2px #FFFFFF;
+    border-top: solid 2px #FFFFFF;
+    transition: transform ease-in-out .2s;
+}
+
+.response-wrapper i.active {
+    transform: rotate(45deg);
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.border {
+    border: 1px solid rgba(10,10,10,.25);
+}
+
+.background-white {
+    background: #FFFFFF;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0;
+    position: relative;
+    user-select: none;
+}
+
+input[type="checkbox"] + label:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    border: solid 1px #b1b1b1;
+    margin-right: 10px;
+    background: #FFF;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.1);
+    transition: box-shadow ease-in-out .15s;
+}
+
+input[type="checkbox"]:checked + label:before {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
+    background: #007cb5;
+    border: solid 1px #007cb5;
+}
+
+input[type="checkbox"]:checked + label:after {
+    content: '';
+    width: 13px;
+    height: 8px;
+    position: absolute;
+    top: 7px;
+    left: 4px;
+    border: 3px solid #FFFFFF;
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+a:active,
+a:hover,
+a:focus {
+    outline: none;
+}
+
+main {
+    min-height: 600px;
+    display: block;
+}
+
+nav > .breadcrumbs {
+    margin-top: 16px;
+}
+
+.left-padding {
+    padding-left: 15px;
+}
+
+
+@media screen and (max-width: 640px) {
+    .left-padding {
+        padding-left: 0;
+    }
+}
+
+.top-bar.top-bar.top-bar {
+    background-color: #00597b;
+}
+
+.top-bar.top-bar.top-bar ul {
+    background: none;
+}
+
+.top-bar.top-bar.top-bar ul li a {
+    color: #FFF;
+}
+
+.vertical-padding {
+    padding: 3em 0;
+}
+
+.no-vertical-margin.no-vertical-margin {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.error i {
+    font-size: 70px;
+}
+
+.marketing-hero {
+    background: #007cb5;
+    overflow: visible;
+    padding: 2.5rem 0 4.5rem;
+    position: relative;
+    text-align: center;
+}
+
+.marketing-hero.emails-insider-hero+.newsletter-signup {
+    display: none
+}
+
+.marketing-hero h1 {
+    position: relative;
+    display: inline-block;
+}
+
+.marketing-hero h1 i {
+    color: #FFF;
+    font-size: 70px;
+    position: absolute;
+    display: block;
+    right: -82px;
+    top: -25px;
+}
+
+.marketing-hero h1 {
+    font-size: 3em;
+    font-weight: 500;
+    line-height: 1
+}
+
+.marketing-hero h1,.marketing-hero h3,.marketing-hero h4 {
+    color: #fff
+}
+
+.marketing-hero h3 {
+    font-size: 1.35em;
+    font-weight: 300
+}
+
+.marketing-hero h6 {
+    color: rgba(255,255,255,0.4);
+    font-size: 1.2em
+}
+
+.marketing-hero p {
+    color: #fff;
+    font-size: 1.3em;
+    line-height: 1.5em;
+    letter-spacing: 3.2px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.marketing-hero a {
+    color: #fff
+}
+
+.marketing-hero a:hover {
+    color: #fff
+}
+
+.marketing-hero .yeti {
+    bottom: -115px;
+    position: absolute;
+    right: -3rem;
+    width: 570px
+}
+
+.marketing-hero .sub-header {
+    background: #10537f;
+    margin-top: 2.5rem;
+    padding-bottom: 6rem;
+    padding-top: 2rem
+}
+
+.marketing-hero .sub-header p {
+    color: #fff;
+    margin: 0;
+    opacity: 0.7
+}
+
+.margin-right {
+    margin-right: 16px;
+}
+
+body .margin-top {
+    margin-top: 16px;
+}
+
+body .margin-bottom {
+    margin-bottom: 16px;
+}
+
+body .margin-bottom-s {
+    margin-bottom: 8px;
+}
+
+.scheme {
+    max-width: none;
+}
+
+.margin-auto.margin-auto.margin-auto  {
+    margin: 0 auto;
+}
+
+.pagination {
+    white-space: nowrap;
+}
+
+.logo {
+    border-right: solid 1px #CCC;
+    padding: 5px 15px;
+    text-align: center;
+}
+
+.logo a {
+    color: #000;
+}
+
+.logo a .letter {
+    color: #1779ba;
+    font-weight: 900;
+    font-size: 18px;
+}
+
+.gray {
+    color: #b3b3b3;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.valign-middle {
+    vertical-align: middle;
+}
+
+.vehicle h5 {
+    padding: 16px 0;
+}
+
+.menu li:not(.logo) {
+    position: relative;
+}
+
+@media screen and (min-width: 640px) {
+    .menu li:not(.logo):hover:after,
+    .menu li:not(.logo).active-item:after {
+        content: '';
+        bottom: -8px;
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        background: #cc9f00;
+    }
+}
+
+/* Search table */
+.highlight em {
+    background: yellow;
+}
+
+#search-form .input-group {
+    position: relative;
+}
+
+#search-form .input-group .reset-input {
+    position: absolute;
+    right: 50px;
+    padding: 12px;
+    color: #e3e3e3;
+}
+
+#tag-container .badge,
+.badge.square {
+    font-size: 14px;
+    max-width: 400px;
+    border-radius: 0;
+    line-height: 33px;
+    padding: 0 16px;
+    height: 33px;
+    white-space: nowrap;
+}
+
+table .badge.square {
+
+}
+
+#tag-container .badge a {
+    color: #FFFFFF;
+}
+
+#tag-container .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+#tag-container .tags > span {
+    margin-bottom: 10px;
+    flex-shrink: 1;
+    margin-right: 16px;
+}
+
+#tag-container > fieldset {
+    margin-top: 15px;
+}
+
+/* End search */
+
+/* drag file */
+
+#drop-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+#drop-area.highlight {
+    border-color: #00597b;
+}
+
+p {
+    margin-top: 0;
+}
+
+.drop-form {
+    margin-bottom: 10px;
+}
+
+#gallery {
+    margin-top: 10px;
+}
+
+#gallery img {
+    width: 150px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+#fileElem {
+    display: none;
+}
+
+/* Unit */
+
+#viewport {
+    height: 600px;
+    overflow: auto;
+    border: solid 1px #CCC;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+img.dragger {
+    max-width: none;
+}
+
+#viewport div.dragger {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: content-box;
+    cursor: pointer;
+    display: block;
+    border: solid 2px transparent;
+}
+
+#viewport .dragger.over,
+#viewport .dragger.locked {
+    border: solid 2px #00597b;
+}
+
+.unit-page tr,
+.unit-page tbody tr:nth-child(even) {
+    cursor: pointer;
+    border-top: solid 1px transparent;
+}
+
+.unit-page tbody tr.over:nth-child(even),
+.unit-page tbody tr.locked:nth-child(even),
+.unit-page tr.locked,
+.unit-page tr.over {
+    border: solid 1px #005c78;
+}
+
+/** Files */
+
+#fileTable .progress {
+    width: 200px;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+/* Pagination */
+
+.pagination li {
+    margin: 0;
+}
+
+.pagination li a[data-page] {
+    max-width: 45px;
+}
+
+/* end pagination */
+
+mark {
+    background: orange;
+    color: black;
+}
+
+/* autocomplete */
+
+.autocomplete-list {
+    position: absolute;
+    background: #FFF;
+    list-style: none;
+    width: 100%;
+    top: 40px;
+    left: 0;
+    margin: 0;
+    z-index: 1;
+    box-shadow: 1px 7px 16px 0 #CCC;
+}
+
+.autocomplete-list li {
+    cursor: pointer;
+    padding: 9px;
+}
+
+.autocomplete-list li:hover {
+    background-color: #00597b;
+    color: #FFF;
+}
+
+#fileTable .progress-meter-text {
+    width: 0;
+    left: 27%;
+}
+
+#login-form {
+    width: 400px;
+}
+
+/* end autocomplete*/
+
+
+/* documentation */
+
+[data-action="showAllNames"], [data-action="popupInfo"] {
+    border-bottom: dashed 1px #1779ba;
+    cursor: pointer;
+}
+
+.popModal_content caption {
+    white-space: nowrap;
+    text-align: left;
+}
+
+/* end documentation */

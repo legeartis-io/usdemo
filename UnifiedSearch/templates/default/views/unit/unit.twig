@@ -1,0 +1,51 @@
+{% use 'unit/heading.twig' %}
+{% use 'unit/main.twig' %}
+{% use 'unit/legend.twig' %}
+{% apply spaceless -%}
+    <div class="grid-container unit-page">
+        <div class="grid-x">
+            {{ block('heading') }}
+        </div>
+        <div class="grid-x">
+            {{ block('main') }}
+        </div>
+        <div class="grid-x">
+            {{ block('legend') }}
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            var viewport = document.querySelector('#viewport');
+            var table = document.querySelector('table');
+
+            jQuery().unitHelper('init', viewport, table)
+        });
+
+        $(function() {
+            $('[data-action="popupInfo"]').click(function() {
+                const amount = $(this).data('amount');
+                const note = $(this).data('note');
+
+                let html = '<table>'
+                    + '<tr><th valign="top">amount</th><td width="100%">' + amount + '</td></tr>'
+                    + '<tr><th valign="top">note</th><td width="100%">' + note + '</td></tr>'
+                    + '</table>';
+
+                $(this).popModal({
+                    html                : html,
+                    placement           : 'bottomLeft',
+                    showCloseBut        : true,
+                    onDocumentClickClose: true,
+                    okFun               : function() {
+                    },
+                    cancelFun           : function() {
+                    },
+                    onLoad              : function() {
+                    },
+                    onClose             : function() {
+                    }
+                });
+            });
+        });
+    </script>
+ {% endapply %}

@@ -1,0 +1,19 @@
+{
+  "UnifiedSearchService": {
+    "login": "",
+    "password": "",
+    "serviceUrl": ""
+  },
+  "OEMService": {
+    "login": "",
+    "key": "",
+    "locale": "en_US"
+  },
+  "property": {
+    "hideRequests": true,
+    "template": {
+      "name": "new",
+      "default_lang": "en_GB"
+    }
+  }
+}

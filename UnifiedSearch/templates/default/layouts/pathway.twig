@@ -1,0 +1,17 @@
+<div class="grid-container">
+    <nav aria-label="You are here:" role="navigation">
+        <ul class="breadcrumbs">
+            {% for item in pathway.pathway %}
+                {% if item.name != '' %}
+                    <li class="{{ current|replace({'/' : ''}) == item.link ? 'current': '' }}">
+                        {% if item.link != '' %}
+                            <a href="{{ item.link }}">{{ item.name }}</a>
+                        {% else %}
+                            <a class="disabled" href="javascript:void(0)">{{ item.name }}</a>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+</div>

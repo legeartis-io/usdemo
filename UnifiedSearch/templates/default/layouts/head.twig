@@ -1,0 +1,156 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Unified Search Demo</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Unified Search Demo">
+    <meta name="msapplication-TileColor" content="#3372DF">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="/UnifiedSearch/templates/default/assets/css/default.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="/UnifiedSearch/templates/default/assets/css/foundation.min.css">
+    <link href="/UnifiedSearch/templates/default/assets/colorbox/colorbox.css" media="screen" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="/UnifiedSearch/templates/default/assets/css/darcula.min.css">
+    <script src="/UnifiedSearch/templates/default/assets/modules/jquery.js"></script>
+
+    {{ getHeadScripts()|raw }}
+
+    <script src="/UnifiedSearch/templates/default/assets/modules/foundation.min.js"></script>
+    <script src="/UnifiedSearch/templates/default/assets/modules/highlight.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/UnifiedSearch/templates/default/assets/popModal/popModal.css">
+    <script src="/UnifiedSearch/templates/default/assets/popModal/popModal.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+
+    function initHljs() {
+        Array.prototype.slice.call(document.querySelectorAll('pre')).forEach(function (block) {
+            if (block.classList.contains('json')) {
+                var jsonObj = JSON.parse(block.innerText);
+                block.innerHTML = JSON.stringify(jsonObj, null, 4);
+            }
+            hljs.highlightBlock(block);
+        });
+
+        var responseWrapper = document.querySelector('.response-wrapper i');
+
+        if (responseWrapper) {
+            responseWrapper.addEventListener('click', toggleResponse);
+        }
+    }
+
+    function toggleResponse() {
+        var responseWrapper = this.closest('.response-wrapper');
+        var response = responseWrapper.querySelector('.response');
+        var evt = response.classList.contains('active') ? 'remove' : 'add';
+        response.classList[evt]('active');
+        this.classList[evt]('active');
+    }
+
+    jQuery(document).ready(function () {
+        jQuery(document).foundation();
+        initHljs();
+    });
+</script>
+<header class="marketing-hero show-for-medium">
+    <a href="{{ baseUrl }}" class="logotype">
+        <p class="hero-framework-link">Search for parts is easy</p>
+        <h1>Unified Search<i class="fas fa-search"></i></h1>
+    </a>
+</header>
+<header>
+    <div class="title-bar" data-responsive-toggle="top-bar" data-hide-for="medium">
+        <button class="menu-icon" type="button" data-toggle></button>
+        <div class="title-bar-title"></div>
+    </div>
+    <div class="top-bar" id="top-bar">
+        <div class="top-bar-left grid-x">
+            <ul class="vertical medium-horizontal menu cell medium-12" data-responsive-menu="accordion medium-dropdown">
+                {% for menuItem in menuItems %}
+                    {% if not menuItem.hidden %}
+                        <li class="{{ menuItem.controller == controller|replace({'Controller': ''}) and menuItem.action == action ? 'active-item' : '' }}">
+                            <a href="{{ createUrl(menuItem.controller, menuItem.action) }}">{{ menuItem.name }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="top-bar-right grid-x">
+            <ul class="vertical medium-horizontal menu cell medium-12" data-responsive-menu="accordion medium-dropdown">
+                {% if user.isLoggedIn %}
+                    <li><a href="{{ createUrl('user', 'logout') }}">{{ user.login }} <i class="fas fa-sign-out-alt"></i></a>
+                    </li>
+                {% else %}
+                    <li><a href="javascript:void(0)" data-open="login-form"><i class="fas fa-user"></i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <div class="reveal" id="login-form" data-reveal>
+        <form action="{{ createUrl('user', 'login') }}" method="post">
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-6 margin-auto">
+                    <div class="grid-x grid-margin-x margin-top">
+                        <div class="cell small-12">
+                            <input data-required type="text" placeholder="login" name="user[login]">
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-12">
+                            <input data-required type="password" placeholder="password" name="user[password]">
+                        </div>
+                    </div>
+                    <input type="hidden" name="user[return]"
+                           value="{{ createUrl(controller|replace({'Controller': ''}), action) }}">
+                    <div class="grid-x grid-margin-x">
+                        <button type="submit" data-submit-form class="button cell small-12">{{ 'LOGIN'|t }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <button class="close-button" data-close aria-label="Close reveal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</header>
+<div id="service-message"></div>
+<div id="service-request">
+    {% if requestText and not hideRequest %}
+        <div class="request hljs">
+            {% for text in requestText %}
+                <pre class="http">{{ text }}</pre>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if responseText %}
+        <div class="response-wrapper">
+            <div class="response hljs overflow-auto">
+                {% for key, text in responseText %}
+                    <pre class="http">{{ requestText[key] }}</pre>
+                    <pre class="json">{{ text }}</pre>
+                {% endfor %}
+            </div>
+            <i></i>
+        </div>
+    {% endif %}
+</div>
+<script type="text/javascript">
+    var logo = document.querySelector('.logotype i');
+
+    if (logo) {
+        logo.addEventListener('click', function (evt) {
+            evt.preventDefault();
+            logo.classList.add('animated');
+            setTimeout(function () {
+                logo.classList.remove('animated');
+            }, 4000)
+        })
+    }
+</script>
+<main>

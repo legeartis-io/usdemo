@@ -1,0 +1,28 @@
+{% block script %}
+    <script type="text/javascript">
+        var dropArea = document.getElementById('drop-area');
+
+        if (dropArea) {
+            jQuery().filesHelper('init',
+                {
+                    fileProgressUrl: '{{ createUrl('files', 'checkFileProgress')|e('js') }}',
+                    uploadFileUrl: '{{ createUrl('files', 'load')|e('js') }}',
+                    removeUrl: '{{ createUrl('files', 'remove')|e('js') }}',
+                    dropArea: dropArea,
+                    activeIconTemplate: '<i class="fas fa-check" style="color: green"></i>'
+                }
+            );
+
+            jQuery(document).on('click', 'a.remove-file', function () {
+                jQuery().filesHelper('removeFile', this);
+                jQuery().filesHelper('makeActive', this);
+            });
+
+            var filesRows = Array.prototype.slice.call(document.querySelectorAll('#fileTable tbody tr'));
+
+            if (filesRows.length) {
+                jQuery().filesHelper('drawProgress', filesRows);
+            }
+        }
+    </script>
+{% endblock %}

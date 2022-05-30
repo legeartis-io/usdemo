@@ -1,0 +1,258 @@
+{% use 'vehicle.twig' %}
+
+<div class="grid-container">
+    <div class="grid-x callout secondary">
+        <form action="{{ createUrl('search', 'show') }}" id="search-form" method="get"
+              class="cell small-12 medium-6 margin-auto">
+            <div class="input-group">
+                <input type="hidden" name="controller" value="searchController">
+                <input type="hidden" name="action" value="show">
+                <input type="hidden" name="page" value="{{ cPage ?: 0 }}">
+                <input type="hidden" name="size" value="20">
+                <a class="reset-input" style="{{ query ? 'display: block' : 'display: none' }}"><i
+                            class="fas fa-times"></i></a>
+                <input class="input-group-field" placeholder="{{ 'SEARCH_PLACEHOLDER'|t }}" type="text" name="query"
+                       value="{{ query }}" autocomplete="off"
+                       data-autocomplete-url="{{ createUrl('search', 'getAutocomplete') }}">
+                <div class="input-group-button">
+                    <button type="submit" class="button"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <fieldset>
+                <input id="filter-by-tag" {{ options.tagToggler ? 'checked' : '' }} name="options[tagToggler]"
+                       type="checkbox"><label for="filter-by-tag">{{ 'FILTER_BY_TAG'|t }}</label>
+            </fieldset>
+            <div id="tag-container" style="display: none">
+                <fieldset class="callout">
+                    <div class="tags">
+                        {% for tag in tags %}
+                            <span class="badge-block"><input type="hidden" name="tags[]" value="{{ tag }}"><span
+                                        class="badge primary">{{ tag }} <a><i
+                                                class="fas fa-times-circle"></i></a></span></span>
+                        {% endfor %}
+                    </div>
+                    <div class="input-group cell medium-5">
+                        <input type="text" id="add-tag" class="input-group-field">
+                        <div class="input-group-button">
+                            <button class="button" id="add-tag-button"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+    {% if result.suggestedQueries|length %}
+        <div class="callout warning">
+            <h5>{{ 'SUGGESTED_QUERIES_FOUND'|t }}</h5>
+            {% for suggestedQuery in result.suggestedQueries %}
+                {% set clearedQuery = suggestedQuery|replace({'<em>': ''})|replace({'</em>': ''})|trim %}
+                <a
+                href="{{ createUrl('search', 'show', {'query' : clearedQuery}) }}">{{ suggestedQuery|raw }}</a>{{ result.suggestedQueries[loop.index0 + 1] ? ', ': '' }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <a href="{{ user ? createUrl('files', 'show') : 'javascript:void(0)' }}" {{ user ? '' : 'data-open="login-form" disabled' }}
+       class="button">{{ 'LOAD_OFFERS'|t }}</a>
+    <div class="clearfix">
+        <div class="float-left">
+            {% if (result.DetectedVehicleContext.vin and result.DetectedVehicleContext.indexed) or not result.DetectedVehicleContext.vin %}
+
+                {% if tags|length %}
+                    {% set tagsString = 'tags[]=' ~ tags|join('&tags[]=') %}
+                {% endif %}
+
+                {{ not indexStart ? pagination('#detailsTable', ['query', query], ['options[tagToggler]', options.tagToggler], tagsString, totalPages) : '' }}
+            {% endif %}
+        </div>
+    </div>
+    {% if indexationError %}
+        <div class="callout alert" data-closable>
+            <div class="flex-container align-middle">
+                <div>{{ indexationError }}</div>
+                <button style="position: static;margin-left: auto;" class="close-button vertical" type="button"
+                        data-close>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    {% endif %}
+    {% if result.DetectedVehicleContext.vin %}
+        <div class="vehicle">
+            <div class="row">
+                <div class="columns">
+                    <ul class="accordion" data-accordion data-multi-expand="true" data-allow-all-closed="true">
+                        {% if foundedVehicles %}
+                            {% if indexStart %}
+                                <div class="index-progress"
+                                     data-get-progress-url="{{ createUrl('search', 'getVinProgress', null, {'indexedAutoId' : indexStart.indexationProgress.indexedAutoId}) }}">
+                                    {{ 'UNKNOWN_VIN'|t|replace({'%s': result.DetectedVehicleContext.vin|upper }) }}
+                                    {% set progress = indexStart.indexationProgress.indexationPercent <= 0 ? '0%' : indexStart.indexationProgress.indexationPercent ~ '%' %}
+                                    <div class="progress {{ fileTask.task.status == 'FINISHED' ? 'success' : '' }}"
+                                         role="progressbar" tabindex="0"
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-meter" style="width: {{ progress }}">
+                                            <p class="progress-meter-text">{{ progress }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {{ block('vehicle') }}
+                            {% endif %}
+                        {% else %}
+                            {{ result.DetectedVehicleContext.vin }} {{ 'NOTHING_FOUND'|t }}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if searchAvailable %}
+        <div class="table-scroll">
+            <table id="detailsTable">
+                <thead>
+                <tr>
+                    <th>{{ 'SCORE'|t }}</th>
+                    <th>{{ 'BRAND'|t }}</th>
+                    <th>{{ 'OEM'|t }}</th>
+                    <th>{{ 'DETAIL'|t }}</th>
+                    {# {% for language in languages %} #}
+                    {# <th>{{ 'NAME'|t }} ({{ language }})</th> #}
+                    {# {% endfor %} #}
+                    {% if foundTags %}
+                        <th>{{ 'TAGS'|t }}</th>
+                    {% endif %}
+                    {% if foundVendorCodes %}
+                        <th>{{ 'VENDOR_CODES'|t }}</th>
+                    {% endif %}
+                    {% if result.DetectedVehicleContext.vin and result.DetectedVehicleContext.indexed and (user.services.oem or not user.isLoggedIn) %}
+                        <th>{{ 'UNITS'|t }}</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% if result.details and ((result.DetectedVehicleContext.vin and result.DetectedVehicleContext.indexed) or not result.DetectedVehicleContext.vin) %}
+                    {% for detail in result.details %}
+                        {% if not indexStart %}
+                            <tr>
+                                <td>{{ detail.score | number_format(2, '.', ',') }}</td>
+                                <td>{{ detail.primaryBrand }}</td>
+                                <td>{{ detail.oem }}</td>
+                                {# <td>{{ detail.primaryName }}</td> #}
+                                {# {% for language in languages %} #}
+                                {# <td>{{ attribute(detail.offers, language)[0] }}</td> #}
+                                {# {% endfor %} #}
+                                {% if detail.highlights.text|length %}
+                                    <td class="highlight">
+                                        <div data-action="showAllNames"
+                                             data-names='{{ detail.names|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}'
+                                             data-offers='{{ detail.offers|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}'>{{ detail.highlights.text|join(', ')|raw }}</div>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        <div data-action="showAllNames"
+                                             data-names='{{ detail.names|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}'
+                                             data-offers='{{ detail.offers|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}'>{{ detail.primaryName }}</div>
+                                    </td>
+                                {% endif %}
+                                {% if vin %}
+                                    <td>
+                                        <a href="{{ createUrl('com_auto', 'search.nodes', {'vin': vin, 'detailId': detail.detailId, 'oem': detail.oem}) }}"
+                                           target="_blank">{{ 'TPL_SEARCHDEMO_SHOW_UNIT'|t }}</a></td>
+                                {% endif %}
+                                {% if foundTags %}
+                                    <td>
+                                        {% for tag in detail.tags %}
+                                            {% set link = createUrl('search', 'show', {
+                                                'page': 0,
+                                                'size': 20,
+                                                'query': '',
+                                                'options': {'tagToggler': 'on'},
+                                                'tags': [tag]
+                                            }) %}
+                                            <a href="{{ link }}"
+                                               class="badge primary square margin-right margin-bottom-s">{{ tag }}</a>
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                                {% if foundVendorCodes %}
+                                    <td>{{ detail.vendorCodes|join(', ') }}</td>
+                                {% endif %}
+                                {% if result.DetectedVehicleContext.vin and result.DetectedVehicleContext.indexed and (user.services.oem or not user.isLoggedIn) %}
+                                    <td>
+                                        <a href="{{ createUrl('unit', 'show', {'vin': result.DetectedVehicleContext.vin, 'indexedAutoId': result.DetectedVehicleContext.indexedAutoId, 'detail_id': detail.detailId, 'oem': detail.oem}) }}">Show
+                                            Units</a></td>
+                                {% endif %}
+                            </tr>
+                            {# {% if detail.highlights.text|length %} #}
+                            {# <tr> #}
+                            {# <td class="highlight" colspan="99">{{ detail.highlights.text|join(', ')|raw }}</td> #}
+                            {# </tr> #}
+                            {# {% endif %} #}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">{{ 'NOTHING_FOUND'|t }}</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    <div class="clearfix">
+        <div class="float-left">
+            {% if (result.DetectedVehicleContext.vin and result.DetectedVehicleContext.indexed) or not result.DetectedVehicleContext.vin %}
+
+                {% if tags|length %}
+                    {% set tagsString = 'tags[]=' ~ tags|join('&tags[]=') %}
+                {% endif %}
+
+                {{ not indexStart ? pagination('#detailsTable', ['query', query], ['options[tagToggler]', options.tagToggler], tagsString, totalPages) : '' }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var search = new searchModule();
+    var form = document.querySelector('#search-form');
+    search.init(form);
+
+    $(function () {
+        $('[data-action="showAllNames"]').click(function () {
+            const names = $(this).data('names');
+            const offers = $(this).data('offers');
+
+            let html = '<table>'
+                + '<caption>{{ 'SYSTEM_NAMING'|t }}</caption>'
+                + '';
+            for (const [key, values] of Object.entries(names)) {
+                html += '<tr><td valign="top">' + key + '</td><td width="100%">' + values.join(', ') + '</td></tr>';
+            }
+            html += '</table>';
+
+            html += '<table>'
+                + '<caption>{{ 'USER_NAMING'|t }}</caption>'
+                + '';
+            for (const [key, values] of Object.entries(offers)) {
+                html += '<tr><td valign="top">' + key + '</td><td width="100%">' + values.join(', ') + '</td></tr>';
+            }
+            html += '</table>';
+
+            $(this).popModal({
+                html: html,
+                placement: 'bottomLeft',
+                showCloseBut: true,
+                onDocumentClickClose: true,
+                okFun: function () {
+                },
+                cancelFun: function () {
+                },
+                onLoad: function () {
+                },
+                onClose: function () {
+                }
+            });
+        });
+    });
+</script>

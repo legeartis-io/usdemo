@@ -1,0 +1,15 @@
+{% use 'blocks/drop_form.twig' %}
+{% use 'blocks/files_table.twig' %}
+{% use 'blocks/script.twig' %}
+
+<div class="grid-container">
+    <div id="outputDiv"></div>
+    {{ block('drop_form') }}
+    {{ block('files_table') }}
+    <div class="clearfix">
+        <div class="float-left">
+            {{ pagination('#fileTable', ['query', query], [], [], totalPages) }}
+        </div>
+    </div>
+</div>
+{{ block('script') }}

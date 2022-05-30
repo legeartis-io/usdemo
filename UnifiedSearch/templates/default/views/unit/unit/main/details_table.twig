@@ -1,0 +1,32 @@
+{% block details_table %}
+    <div class="table-scroll">
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Brand</th>
+                <th>Oem</th>
+                <th>Name(rus)</th>
+                <th>Name(eng)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for code, group in details %}
+                {% for detail in group %}
+                    <tr data-code="{{ code|replace({'i': ''}) }}" class="{{ detail.oem == oem ? 'locked' : '' }}">
+                        <td>{{ code|replace({'i': ''}) }}</td>
+                        <td>{{ detail.primaryBrand }}</td>
+                        <td>
+                            <div data-action="popupInfo" data-amount="{{ detail.amount }}" data-note="{{ detail.note }}">
+                                {{ detail.oem }}
+                            </div>
+                        </td>
+                        <td>{{ detail.offers.ru_RU ? detail.offers.ru_RU[0]:detail.names.ru_RU[0] }}</td>
+                        <td>{{ detail.offers.en_US ? detail.offers.en_US[0]:detail.names.en_US[0] }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

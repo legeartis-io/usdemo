@@ -1,0 +1,22 @@
+{% block drop_form %}
+    <div class="grid-x">
+        <div class="cell medium-6 small-12">
+            <form method="POST" enctype="multipart/form-data" autocomplete="off" data-role="adminForm" class="text-center">
+                <div id="drop-area">
+                    <form class="drop-form">
+                        <p>{{ 'DROP_FILE_HERE'|t }}</p>
+                        <input type="file" name="files[]" id="fileElem" onchange="jQuery().filesHelper('handleFiles', this.files)">
+                        <label class="button" for="fileElem">{{ 'SELECT_FILE'|t }}</label>
+                    </form>
+                </div>
+            </form>
+        </div>
+        <div class="cell medium-6 small-12">
+            <div class="grid-container">
+                <h5>{{ 'FILE_EXAMPLE'|t }}</h5>
+                <i class="far fa-file-excel" style="color: green"></i>
+                <span><a href="{{ createUrl('files', 'downloadLocal', {'name' : 'importFileExample.csv'}) }}" target="_blank">importFileExample.csv</a> <small>{{ 'ALLOWED_FILE_TYPES'|t|raw }}</small></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

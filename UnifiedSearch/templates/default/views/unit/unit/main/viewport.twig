@@ -1,0 +1,34 @@
+{% block viewport %}
+    <div id="viewport" style="width: 585px;">
+        {% if imagemap %}
+            {% for item in imagemap.mapObjects %}
+                {% set coi = 'i' ~ item.code %}
+                {% set width = item.x2 - item.x1 %}
+                {% set height = item.y2 - item.y1 %}
+                {% set oleft = item.x1 %}
+                {% set otop = item.y1 %}
+
+                <div name="{{ item.code }}"
+                     data-code="{{ item.code }}"
+                     class="dragger {{ item.link ? 'detail-link-tooltip' : 'unit-tooltip' }} {% if highlightCode == 'i' ~ item.code %}locked{% endif %}"
+                     style="width: {{ width }}; height: {{ height }};
+                             margin-left: {{ oleft }}px;
+                             margin-top: {{ otop }}px;
+                             position: absolute;
+                             overflow: hidden;"
+                        {% if item.link %}
+                            data-label="{{item.link.label }}"
+                        {% endif %}
+                     owidth="{{ width }}px"
+                     oheight="{{ height }}px"
+                     oleft="{{ oleft }}px"
+                     otop="{{ otop }}px">
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <img class="dragger"
+             src="{{ unit.largeimageurl ? unit.largeimageurl : noimage }}"
+             onload="jQuery().unitHelper('rescaleImage', -100, {x: 0, y: 0});">
+    </div>
+{% endblock %}
