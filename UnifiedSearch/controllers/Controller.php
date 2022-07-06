@@ -130,7 +130,11 @@ class Controller
             die();
         }
 
-        $this->render('tmpl', $code . '.twig');
+        if ($code == 401 || $code == 404 || $code == 500 || $code == 502) {
+            $this->render('tmpl', $code . '.twig');
+        } else {
+            $this->render('tmpl', '500.twig');
+        }
         die();
     }
 
