@@ -70,12 +70,7 @@ class filesController extends Controller
         $us = $this->getUS();
         $res = $us->uploadFile($file['tmp_name'], $file['name']);
 
-        if (is_string($res)) {
-            echo $res;
-            die();
-        }
-
-        $this->responseJson($res[0]);
+        $this->responseJson($res);
     }
 
     public function checkFileProgress()
