@@ -165,6 +165,7 @@ class unitController extends Controller
 
         $oems = [];
         $detailImageCodes = [];
+        $this->highlightCode = null;
 
         if (!empty($detailsList->getParts())) {
             foreach ($detailsList->getParts() as $detail) {
@@ -179,7 +180,7 @@ class unitController extends Controller
         $details = [];
         foreach ($detailsList->getParts() as $original) {
             foreach ($searchByOems->getDetailsByOem() as $detail) {
-                if ($detail->getOem() == $original->getOem()) {
+                if ($detail->getOem() == $original->getOem() && count($detail->getDetails())) {
                     foreach ($detail->getDetails() as $item) {
                         $detailImageCodes[$item->getOem() . $item->getPrimaryBrand()] = $original->getCodeOnImage();
                         $item->amount = $this->getAttr('amount', $original->getAttributes());
@@ -187,6 +188,7 @@ class unitController extends Controller
                         $item->code = $original->getCodeOnImage();
                         $details[$original->getCodeOnImage()][$item->getOem() . $item->getPrimaryBrand()] = $item;
                     }
+                    $this->highlightCode = 'i' . $original->getCodeOnImage();
                 }
             }
         }
@@ -194,22 +196,21 @@ class unitController extends Controller
         $this->pathway->addItem('Unified Search', $this->getBaseUrl());
         $this->pathway->addItem($this->getLanguage()->t('SEARCH_DEMO'), $this->createUrl('search', 'show'));
         $this->pathway->addItem($unit->getName(), '');
-        $highlightCode = null;
 
-        if (!empty($imageMap)) {
-            foreach ($imageMap->getMapObjects() as $mapItem) {
-                $detailOem = !empty($details['i' . $mapItem->getCode()]) ? reset($details['i' . $mapItem->getCode()])->oem : null;
-                $mapItem->oem = $detailOem;
-                if (!empty($details['i' . $mapItem->getCode()]) && is_array($details['i' . $mapItem->getCode()])) {
-
-                    foreach ($details['i' . $mapItem->getCode()] as $detail) {
-                        if ($detail->oem === $oem) {
-                            $highlightCode = $detail->code;
-                        }
-                    }
-                }
-            }
-        }
+//        if (!empty($imageMap)) {
+//            foreach ($imageMap->getMapObjects() as $mapItem) {
+//                $detailOem = !empty($details['i' . $mapItem->getCode()]) ? reset($details['i' . $mapItem->getCode()])->oem : null;
+//                $mapItem->oem = $detailOem;
+//                if (!empty($details['i' . $mapItem->getCode()]) && is_array($details['i' . $mapItem->getCode()])) {
+//
+//                    foreach ($details['i' . $mapItem->getCode()] as $detail) {
+//                        if ($detail->oem === $oem) {
+//                            $highlightCode = $detail->code;
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         $this->unit = $unit;
         $this->details = $details;
@@ -217,7 +218,6 @@ class unitController extends Controller
         $this->imagemap = $imageMap;
         $this->detailImageCodes = $detailImageCodes;
         $this->vehicleInfo = $vehicleInfo;
-        $this->highlightCode = $highlightCode;
 
         $this->render('unit', 'unit.twig', true, $format);
     }
